@@ -1,0 +1,7 @@
+#!/bin/bash
+
+which pip &> /dev/null || { >&2 echo "No pip!"; exit 1; }
+pip list | grep ipykernel &> /dev/null || { >&2 echo "No jupyter!"; exit 1; }
+[ -z ${VIRTUAL_ENV} ] && { >&2 echo "Not in a venv!"; exit 1; }
+
+python -m ipykernel install --user --name "$(basename $VIRTUAL_ENV)"

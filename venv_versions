@@ -1,0 +1,22 @@
+#!/bin/bash
+
+export WORKON_HOME=$HOME/.virtualenvs
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.8
+source /usr/local/bin/virtualenvwrapper_lazy.sh
+
+while IFS= read -u 3 -r venvname; do
+  echo $venvname
+  workon $venvname
+  echo -n -e '\t'
+  python --version
+
+  if (( "$#" != 0 ));then
+    IFS='
+    '
+    pip list 2> /dev/null |
+      grep -e "$*" |
+      awk -F'[[:blank:]]+' -v OFS="\t\t" '{print "\t" $1, $2}'
+  fi
+
+  echo
+done 3< <(lsvirtualenv -b)
